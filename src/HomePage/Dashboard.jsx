@@ -7,7 +7,7 @@ import {
   UserCheck, Bell
 } from 'lucide-react';
 
-const Dashboard = () => {
+const Dashboard = ({ currentPath = "/dashboard" }) => {
   // Animation variants
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
@@ -25,13 +25,12 @@ const Dashboard = () => {
 
   // Navigation items
   const navItems = [
-    { name: 'Home', active: false },
-    { name: 'Dashboard', active: true },
-    { name: 'Discover', active: false },
-    { name: 'Assistant', active: false },
-    { name: 'Report', active: false },
-    { name: 'Profile', active: false },
-    { name: 'Admin', active: false }
+    { name: 'Home', path: '/home', icon: Home },
+    { name: 'Dashboard', path: '/dashboard', icon: BarChart3 },
+    { name: 'Discover', path: '/discover', icon: Compass },
+    { name: 'Assistant', path: '/assistant', icon: Bot },
+    { name: 'Report', path: '/report', icon: FileText },
+    { name: 'Profile', path: '/profile', icon: User },
   ];
 
   // Feature cards data
@@ -66,18 +65,22 @@ const Dashboard = () => {
 
           {/* Navigation Links */}
           <div className="hidden lg:flex space-x-8">
-            {navItems.map((item, index) => (
-              <motion.a
-                key={item.name}
-                href={item.name === 'Home' ? '#' : `#${item.name.toLowerCase()}`}
-                className={`text-gray-700 hover:text-orange-400 font-medium transition-colors px-3 py-2 rounded-lg ${
-                  item.active ? 'bg-orange-400 text-white' : ''
-                }`}
-                whileHover={{ y: -2 }}
-              >
-                {item.name}
-              </motion.a>
-            ))}
+            {navItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <motion.a
+                  key={item.name}
+                  href={item.path}
+                  className={`text-gray-700 hover:text-orange-400 font-medium transition-colors px-3 py-2 rounded-lg flex items-center gap-2 ${
+                    currentPath === item.path ? 'bg-orange-400 text-white' : ''
+                  }`}
+                  whileHover={{ y: -2 }}
+                >
+                  <IconComponent className="w-4 h-4" />
+                  {item.name}
+                </motion.a>
+              );
+            })}
           </div>
 
           {/* Notification Icon */}

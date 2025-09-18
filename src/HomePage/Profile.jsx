@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   User, MapPin, Briefcase, Users, Phone, Mail, Image, Eye, EyeOff,
-  Download, QrCode, CheckCircle
+  Download, QrCode, CheckCircle, Home, BarChart3, Compass, Bot, 
+  FileText, Shield, Bell
 } from 'lucide-react';
 
-const Profile = () => {
+const Profile = ({ currentPath = "/profile" }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstName: 'Yash',
@@ -17,6 +18,16 @@ const Profile = () => {
     language: 'English',
     nationality: 'India'
   });
+
+  // Navigation items
+  const navItems = [
+    { name: 'Home', path: '/home', icon: Home },
+    { name: 'Dashboard', path: '/dashboard', icon: BarChart3 },
+    { name: 'Discover', path: '/discover', icon: Compass },
+    { name: 'Assistant', path: '/assistant', icon: Bot },
+    { name: 'Report', path: '/report', icon: FileText },
+    { name: 'Profile', path: '/profile', icon: User },
+  ];
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -37,28 +48,56 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-poppins">
-      {/* Header */}
-      <header className="bg-white shadow-sm py-4 px-4 md:px-16">
-        <nav className="container mx-auto flex justify-between items-center">
-          <a href="home.html" className="logo" aria-label="RakshaPath Homepage">
-            <img 
-              src="https://i.ibb.co/p338bYn/Screenshot-2025-09-17-163044.png" 
-              alt="RakshaPath Logo" 
-              className="h-10"
-            />
-          </a>
-          <ul className="hidden md:flex list-none gap-6 items-center">
-            <li><a href="home.html" className="text-gray-900 hover:text-amber-500 transition-colors py-2 px-4 rounded-lg">Home</a></li>
-            <li><a href="#" className="text-gray-900 hover:text-amber-500 transition-colors py-2 px-4 rounded-lg">Dashboard</a></li>
-            <li><a href="index.html" className="text-gray-900 hover:text-amber-500 transition-colors py-2 px-4 rounded-lg">Discover</a></li>
-            <li><a href="#" className="text-gray-900 hover:text-amber-500 transition-colors py-2 px-4 rounded-lg">Assistant</a></li>
-            <li><a href="#" className="text-gray-900 hover:text-amber-500 transition-colors py-2 px-4 rounded-lg">Report</a></li>
-            <li><a href="profile.html" className="bg-amber-500 text-white py-2 px-4 rounded-lg">Profile</a></li>
-            <li><a href="#" className="text-gray-900 hover:text-amber-500 transition-colors py-2 px-4 rounded-lg">Admin</a></li>
-          </ul>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header - Updated to match Dashboard */}
+      <motion.header 
+        className="bg-white shadow-sm sticky top-0 z-50 px-4 md:px-16 py-4"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <nav className="flex justify-between items-center max-w-7xl mx-auto">
+          {/* Logo */}
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-orange-400 rounded-lg flex items-center justify-center mr-3">
+              <Shield className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <div className="text-lg font-bold text-gray-900">RakshaPath</div>
+              <div className="text-xs text-gray-600 font-semibold">YOUR SAFE WAY</div>
+            </div>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="hidden lg:flex space-x-8">
+            {navItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <motion.a
+                  key={item.name}
+                  href={item.path}
+                  className={`text-gray-700 hover:text-orange-400 font-medium transition-colors px-3 py-2 rounded-lg flex items-center gap-2 ${
+                    currentPath === item.path ? 'bg-orange-400 text-white' : ''
+                  }`}
+                  whileHover={{ y: -2 }}
+                >
+                  <IconComponent className="w-4 h-4" />
+                  {item.name}
+                </motion.a>
+              );
+            })}
+          </div>
+
+          {/* Notification Icon */}
+          <motion.div
+            className="p-2 hover:bg-gray-100 rounded-lg cursor-pointer"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Bell className="w-6 h-6 text-gray-700" />
+          </motion.div>
         </nav>
-      </header>
+      </motion.header>
 
       {/* Main Content */}
       <main className="container mx-auto py-8 px-4">
@@ -123,14 +162,24 @@ const Profile = () => {
                 className="w-full rounded-lg mb-6"
               />
               <div className="flex gap-4">
-                <a href="#" className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg bg-amber-500 text-white font-semibold">
+                <motion.a 
+                  href="#" 
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg bg-orange-400 text-white font-semibold"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <Eye size={20} />
                   View ID
-                </a>
-                <a href="#" className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-amber-500 text-amber-500 font-semibold">
+                </motion.a>
+                <motion.a 
+                  href="#" 
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-orange-400 text-orange-400 font-semibold"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <Download size={20} />
                   Download
-                </a>
+                </motion.a>
               </div>
             </motion.div>
           </aside>
@@ -153,7 +202,7 @@ const Profile = () => {
                     id="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    className="p-3 border border-gray-300 rounded-lg text-base"
+                    className="p-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-orange-300 focus:border-orange-400 transition-all"
                   />
                 </div>
                 
@@ -164,7 +213,7 @@ const Profile = () => {
                     id="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    className="p-3 border border-gray-300 rounded-lg text-base"
+                    className="p-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-orange-300 focus:border-orange-400 transition-all"
                   />
                 </div>
                 
@@ -175,13 +224,13 @@ const Profile = () => {
                     id="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="p-3 border border-gray-300 rounded-lg text-base"
+                    className="p-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-orange-300 focus:border-orange-400 transition-all"
                   />
                 </div>
                 
                 <div className="flex flex-col md:col-span-2">
                   <label htmlFor="password" className="text-sm font-medium text-gray-600 mb-2">Password</label>
-                  <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                  <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-orange-300 focus-within:border-orange-400 transition-all">
                     <input
                       type={showPassword ? "text" : "password"}
                       id="password"
@@ -189,21 +238,23 @@ const Profile = () => {
                       onChange={handleInputChange}
                       className="p-3 flex-grow outline-none"
                     />
-                    <button 
+                    <motion.button 
                       type="button" 
                       onClick={togglePasswordVisibility}
-                      className="px-4 py-3 text-gray-600"
+                      className="px-4 py-3 text-gray-600 hover:text-orange-400 transition-colors"
                       aria-label={showPassword ? "Hide password" : "Show password"}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
                 
                 <div className="flex flex-col">
                   <label className="text-sm font-medium text-gray-600 mb-2">Phone Number</label>
                   <div className="flex">
-                    <select className="p-3 border border-gray-300 rounded-l-lg bg-gray-50 w-32">
+                    <select className="p-3 border border-gray-300 rounded-l-lg bg-gray-50 w-32 focus:ring-2 focus:ring-orange-300 focus:border-orange-400">
                       <option value="IN">🇮🇳 +91</option>
                       <option value="US">🇺🇸 +1</option>
                       <option value="CN">🇨🇳 +86</option>
@@ -212,7 +263,7 @@ const Profile = () => {
                     <input
                       type="tel"
                       placeholder="000 000 0000"
-                      className="p-3 border border-gray-300 border-l-0 rounded-r-lg flex-grow"
+                      className="p-3 border border-gray-300 border-l-0 rounded-r-lg flex-grow focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
                     />
                   </div>
                 </div>
@@ -220,7 +271,7 @@ const Profile = () => {
                 <div className="flex flex-col">
                   <label className="text-sm font-medium text-gray-600 mb-2">Emergency Phone Number</label>
                   <div className="flex">
-                    <select className="p-3 border border-gray-300 rounded-l-lg bg-gray-50 w-32">
+                    <select className="p-3 border border-gray-300 rounded-l-lg bg-gray-50 w-32 focus:ring-2 focus:ring-orange-300 focus:border-orange-400">
                       <option value="IN">🇮🇳 +91</option>
                       <option value="US">🇺🇸 +1</option>
                       <option value="CN">🇨🇳 +86</option>
@@ -229,7 +280,7 @@ const Profile = () => {
                     <input
                       type="tel"
                       placeholder="000 000 0000"
-                      className="p-3 border border-gray-300 border-l-0 rounded-r-lg flex-grow"
+                      className="p-3 border border-gray-300 border-l-0 rounded-r-lg flex-grow focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
                     />
                   </div>
                 </div>
@@ -240,7 +291,7 @@ const Profile = () => {
                     id="language"
                     value={formData.language}
                     onChange={handleInputChange}
-                    className="p-3 border border-gray-300 rounded-lg"
+                    className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-300 focus:border-orange-400 transition-all"
                   >
                     <option>English</option>
                     <option>Hindi</option>
@@ -254,7 +305,7 @@ const Profile = () => {
                     id="nationality"
                     value={formData.nationality}
                     onChange={handleInputChange}
-                    className="p-3 border border-gray-300 rounded-lg"
+                    className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-300 focus:border-orange-400 transition-all"
                   >
                     <option>India</option>
                     <option>United States</option>
@@ -268,7 +319,7 @@ const Profile = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
-                    className="bg-amber-500 text-white py-3 px-8 rounded-lg text-lg font-semibold mt-4 w-full md:w-auto"
+                    className="bg-orange-400 text-white py-3 px-8 rounded-lg text-lg font-semibold mt-4 w-full md:w-auto hover:bg-orange-500 transition-colors"
                   >
                     Save
                   </motion.button>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Bell, User, MapPin, MessageCircle, Navigation, 
@@ -7,8 +8,9 @@ import {
   CheckCircle2, Bot, AlertTriangle
 } from 'lucide-react';
 
-const RakshaPathHome = () => {
+const Home = () => {
   const [activeFilter, setActiveFilter] = useState('Coastal');
+  const location = useLocation();
 
   // Animation variants
   const fadeInUp = {
@@ -25,8 +27,15 @@ const RakshaPathHome = () => {
     }
   };
 
-  // Data arrays
-  const navLinks = ['Home', 'Dashboard', 'Discover', 'Assistant', 'Report', 'Profile'];
+  // Navigation links
+  const navLinks = [
+    { name: 'Home', path: '/home' },
+    { name: 'Dashboard', path: '/dashboard' },
+    { name: 'Discover', path: '/discover' },
+    { name: 'Assistant', path: '/assistant' },
+    { name: 'Report', path: '/report' },
+    { name: 'Profile', path: '/profile' }
+  ];
   
   const features = [
     {
@@ -161,16 +170,16 @@ const RakshaPathHome = () => {
           {/* Navigation Links */}
           <div className="hidden lg:flex space-x-8">
             {navLinks.map((link, index) => (
-              <motion.a
-                key={link}
-                href={link === 'Home' ? '#' : `#${link.toLowerCase()}`}
-                className={`text-gray-700 hover:text-orange-400 font-medium transition-colors px-3 py-2 rounded-lg ${
-                  link === 'Home' ? 'bg-orange-400 text-white' : ''
-                }`}
-                whileHover={{ y: -2 }}
-              >
-                {link}
-              </motion.a>
+              <motion.div key={link.name} whileHover={{ y: -2 }}>
+                <Link
+                  to={link.path}
+                  className={`text-gray-700 hover:text-orange-400 font-medium transition-colors px-3 py-2 rounded-lg ${
+                    location.pathname === link.path ? 'bg-orange-400 text-white' : ''
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              </motion.div>
             ))}
           </div>
 
@@ -206,22 +215,24 @@ const RakshaPathHome = () => {
                   <span className="text-orange-400">Anywhere, Anytime</span>
                 </h1>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <motion.a
-                    href="#"
-                    className="bg-orange-400 text-white px-8 py-4 rounded-lg font-semibold text-center hover:bg-orange-500 transition-colors"
-                    whileHover={{ y: -3 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Start Your Journey
-                  </motion.a>
-                  <motion.a
-                    href="#"
-                    className="bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold text-center hover:bg-gray-800 transition-colors"
-                    whileHover={{ y: -3 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Get Your Tourist ID
-                  </motion.a>
+                  <Link to="/dashboard">
+                    <motion.button
+                      className="bg-orange-400 text-white px-8 py-4 rounded-lg font-semibold text-center hover:bg-orange-500 transition-colors w-full sm:w-auto"
+                      whileHover={{ y: -3 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Start Your Journey
+                    </motion.button>
+                  </Link>
+                  <Link to="/signup">
+                    <motion.button
+                      className="bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold text-center hover:bg-gray-800 transition-colors w-full sm:w-auto"
+                      whileHover={{ y: -3 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Get Your Tourist ID
+                    </motion.button>
+                  </Link>
                 </div>
               </motion.div>
               
@@ -261,9 +272,20 @@ const RakshaPathHome = () => {
               {features.map((feature, index) => (
                 <motion.div
                   key={index}
-                  className="flex flex-col items-center text-center p-6 rounded-lg hover:shadow-lg transition-all duration-300"
+                  className="flex flex-col items-center text-center p-6 rounded-lg hover:shadow-lg transition-all duration-300 cursor-pointer"
                   variants={fadeInUp}
                   whileHover={{ y: -8 }}
+                  onClick={() => {
+                    if (feature.title.includes('SafarBot')) {
+                      window.location.href = '/assistant';
+                    } else if (feature.title.includes('Report')) {
+                      window.location.href = '/report';
+                    } else if (feature.title.includes('Discover')) {
+                      window.location.href = '/discover';
+                    } else {
+                      window.location.href = '/signup';
+                    }
+                  }}
                 >
                   <div className="w-20 h-20 mb-6 flex items-center justify-center">
                     <img 
@@ -392,9 +414,9 @@ const RakshaPathHome = () => {
                         <MapPin className="w-5 h-5" />
                         <span>{place.location}</span>
                       </div>
-                      <a href="#" className="text-gray-700 hover:text-orange-400 transition-colors">
+                      <Link to="/discover" className="text-gray-700 hover:text-orange-400 transition-colors">
                         Know More
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </motion.div>
@@ -403,14 +425,15 @@ const RakshaPathHome = () => {
             
             {/* CTA Button */}
             <div className="text-center">
-              <motion.a
-                href="#"
-                className="inline-block bg-orange-400 text-white px-8 py-4 rounded-lg font-semibold hover:bg-orange-500 transition-colors"
-                whileHover={{ y: -3 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                Discover More
-              </motion.a>
+              <Link to="/discover">
+                <motion.button
+                  className="bg-orange-400 text-white px-8 py-4 rounded-lg font-semibold hover:bg-orange-500 transition-colors"
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Discover More
+                </motion.button>
+              </Link>
             </div>
           </div>
         </section>
@@ -655,4 +678,4 @@ const RakshaPathHome = () => {
   );
 };
 
-export default RakshaPathHome;
+export default Home;
