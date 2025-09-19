@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Bell, User, MapPin, MessageCircle, Navigation, 
   Shield, Download, CheckCircle, Facebook, 
   Instagram, Twitter, Mail, UserPlus, 
-  CheckCircle2, Bot, AlertTriangle
+  CheckCircle2, Bot, AlertTriangle, Home, 
+  BarChart3, Compass, FileText
 } from 'lucide-react';
 
-const Home = () => {
+const HomePage = ({ currentPath = "/home" }) => {
   const [activeFilter, setActiveFilter] = useState('Coastal');
-  const location = useLocation();
 
   // Animation variants
   const fadeInUp = {
@@ -27,14 +26,14 @@ const Home = () => {
     }
   };
 
-  // Navigation links
-  const navLinks = [
-    { name: 'Home', path: '/home' },
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Discover', path: '/discover' },
-    { name: 'Assistant', path: '/assistant' },
-    { name: 'Report', path: '/report' },
-    { name: 'Profile', path: '/profile' }
+  // Navigation items
+  const navItems = [
+    { name: 'Home', path: '/home', icon: Home },
+    { name: 'Dashboard', path: '/dashboard', icon: BarChart3 },
+    { name: 'Discover', path: '/discover', icon: Compass },
+    { name: 'Assistant', path: '/assistant', icon: Bot },
+    { name: 'Report', path: '/report', icon: FileText },
+    { name: 'Profile', path: '/profile', icon: User },
   ];
   
   const features = [
@@ -147,8 +146,8 @@ const Home = () => {
   const filters = ['Coastal', 'Mountains', 'Heritage', 'Wildlife', 'Spiritual', 'More'];
 
   return (
-    <div className="min-h-screen bg-white font-sans">
-      {/* Header */}
+    <div className="min-h-screen bg-gray-50 font-sans">
+      {/* Header - Updated to match Dashboard */}
       <motion.header 
         className="bg-white shadow-sm sticky top-0 z-50 px-4 md:px-16 py-4"
         initial={{ y: -100 }}
@@ -169,18 +168,22 @@ const Home = () => {
 
           {/* Navigation Links */}
           <div className="hidden lg:flex space-x-8">
-            {navLinks.map((link, index) => (
-              <motion.div key={link.name} whileHover={{ y: -2 }}>
-                <Link
-                  to={link.path}
-                  className={`text-gray-700 hover:text-orange-400 font-medium transition-colors px-3 py-2 rounded-lg ${
-                    location.pathname === link.path ? 'bg-orange-400 text-white' : ''
+            {navItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <motion.a
+                  key={item.name}
+                  href={item.path}
+                  className={`text-gray-700 hover:text-orange-400 font-medium transition-colors px-3 py-2 rounded-lg flex items-center gap-2 ${
+                    currentPath === item.path ? 'bg-orange-400 text-white' : ''
                   }`}
+                  whileHover={{ y: -2 }}
                 >
-                  {link.name}
-                </Link>
-              </motion.div>
-            ))}
+                  <IconComponent className="w-4 h-4" />
+                  {item.name}
+                </motion.a>
+              );
+            })}
           </div>
 
           {/* Notification Icon */}
@@ -215,24 +218,20 @@ const Home = () => {
                   <span className="text-orange-400">Anywhere, Anytime</span>
                 </h1>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Link to="/dashboard">
-                    <motion.button
-                      className="bg-orange-400 text-white px-8 py-4 rounded-lg font-semibold text-center hover:bg-orange-500 transition-colors w-full sm:w-auto"
-                      whileHover={{ y: -3 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      Start Your Journey
-                    </motion.button>
-                  </Link>
-                  <Link to="/signup">
-                    <motion.button
-                      className="bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold text-center hover:bg-gray-800 transition-colors w-full sm:w-auto"
-                      whileHover={{ y: -3 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      Get Your Tourist ID
-                    </motion.button>
-                  </Link>
+                  <motion.button
+                    className="bg-orange-400 text-white px-8 py-4 rounded-lg font-semibold text-center hover:bg-orange-500 transition-colors w-full sm:w-auto"
+                    whileHover={{ y: -3 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Start Your Journey
+                  </motion.button>
+                  <motion.button
+                    className="bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold text-center hover:bg-gray-800 transition-colors w-full sm:w-auto"
+                    whileHover={{ y: -3 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Get Your Tourist ID
+                  </motion.button>
                 </div>
               </motion.div>
               
@@ -414,9 +413,9 @@ const Home = () => {
                         <MapPin className="w-5 h-5" />
                         <span>{place.location}</span>
                       </div>
-                      <Link to="/discover" className="text-gray-700 hover:text-orange-400 transition-colors">
+                      <a href="/discover" className="text-gray-700 hover:text-orange-400 transition-colors">
                         Know More
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </motion.div>
@@ -425,15 +424,13 @@ const Home = () => {
             
             {/* CTA Button */}
             <div className="text-center">
-              <Link to="/discover">
-                <motion.button
-                  className="bg-orange-400 text-white px-8 py-4 rounded-lg font-semibold hover:bg-orange-500 transition-colors"
-                  whileHover={{ y: -3 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Discover More
-                </motion.button>
-              </Link>
+              <motion.button
+                className="bg-orange-400 text-white px-8 py-4 rounded-lg font-semibold hover:bg-orange-500 transition-colors"
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Discover More
+              </motion.button>
             </div>
           </div>
         </section>
@@ -678,4 +675,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
